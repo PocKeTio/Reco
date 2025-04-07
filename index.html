@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RecoFinance - Rapprochement Bancaire</title>
+    <title data-i18n="app_title">RecoFinance - Rapprochement Bancaire</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -14,24 +14,24 @@
         <nav id="sidebar">
             <div class="sidebar-header">
                 <h3>RecoFinance</h3>
-                <p class="text-muted">Solution de rapprochement</p>
+                <p class="text-muted" data-i18n="app_subtitle">Solution de rapprochement</p>
             </div>
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="#" data-view="dashboard"><i class="fas fa-home"></i> Tableau de bord</a>
+                    <a href="#" data-view="dashboard"><i class="fas fa-home"></i> <span data-i18n="dashboard">Tableau de bord</span></a>
                 </li>
                 <li>
-                    <a href="#" data-view="receivable"><i class="fas fa-money-bill-wave"></i> Rapprochement Paiements</a>
+                    <a href="#" data-view="receivable"><i class="fas fa-money-bill-wave"></i> <span data-i18n="payments">Rapprochement Paiements</span></a>
                 </li>
                 <li>
-                    <a href="#" data-view="pivot"><i class="fas fa-file-invoice"></i> Suivi des Suspens</a>
+                    <a href="#" data-view="pivot"><i class="fas fa-file-invoice"></i> <span data-i18n="suspens">Suivi des Suspens</span></a>
                 </li>
                 <li>
-                    <a href="#" data-view="import"><i class="fas fa-file-import"></i> Importer Données</a>
+                    <a href="#" data-view="import"><i class="fas fa-file-import"></i> <span data-i18n="imports">Importer Données</span></a>
                 </li>
                 <li>
-                    <a href="#" data-view="settings"><i class="fas fa-cog"></i> Paramètres</a>
+                    <a href="#" data-view="settings"><i class="fas fa-cog"></i> <span data-i18n="settings">Paramètres</span></a>
                 </li>
             </ul>
 
@@ -52,10 +52,18 @@
                     
                     <div class="search-container">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Rechercher...">
+                        <input type="text" class="search-input" data-i18n-placeholder="search" placeholder="Rechercher...">
                     </div>
 
                     <div class="ms-auto d-flex align-items-center">
+                        <!-- Sélecteur de langue -->
+                        <div class="language-selector me-3">
+                            <select id="language-selector" class="form-select form-select-sm">
+                                <option value="fr">Français</option>
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                            </select>
+                        </div>
                         <div class="notifications me-3">
                             <i class="fas fa-bell position-relative">
                                 <span class="notification-badge">3</span>
@@ -73,7 +81,7 @@
             <div class="view-container">
                 <!-- Dashboard View -->
                 <div id="dashboard-view" class="content-view active">
-                    <h2>Tableau de bord</h2>
+                    <h2 data-i18n="dashboard_title">Tableau de bord</h2>
                     
                     <div class="kpi-container">
                         <div class="kpi-card">
@@ -82,7 +90,7 @@
                             </div>
                             <div class="kpi-details">
                                 <h3>28 500 €</h3>
-                                <p>Paiements non rapprochés</p>
+                                <p data-i18n="unmatched_payments">Paiements non rapprochés</p>
                                 <span class="kpi-count">15 transactions</span>
                             </div>
                         </div>
@@ -93,7 +101,7 @@
                             </div>
                             <div class="kpi-details">
                                 <h3>42 750 €</h3>
-                                <p>Suspens ouverts</p>
+                                <p data-i18n="open_suspens">Suspens ouverts</p>
                                 <span class="kpi-count">22 transactions</span>
                             </div>
                         </div>
@@ -104,7 +112,7 @@
                             </div>
                             <div class="kpi-details">
                                 <h3>15 200 €</h3>
-                                <p>Suspens > 30 jours</p>
+                                <p data-i18n="older_than_30_days">Suspens > 30 jours</p>
                                 <span class="kpi-count">7 transactions</span>
                             </div>
                         </div>
@@ -115,7 +123,7 @@
                             </div>
                             <div class="kpi-details">
                                 <h3>152 350 €</h3>
-                                <p>Rapprochés (ce mois)</p>
+                                <p data-i18n="matched_this_month">Rapprochés (ce mois)</p>
                                 <span class="kpi-count">64 transactions</span>
                             </div>
                         </div>
@@ -123,11 +131,11 @@
 
                     <div class="dashboard-charts-container">
                         <div class="dashboard-chart">
-                            <h4>Évolution des suspens</h4>
+                            <h4 data-i18n="evolution_chart">Évolution des suspens</h4>
                             <canvas id="suspensChart"></canvas>
                         </div>
                         <div class="dashboard-chart">
-                            <h4>Répartition par âge des suspens</h4>
+                            <h4 data-i18n="age_distribution_chart">Répartition par âge des suspens</h4>
                             <canvas id="ageDistributionChart"></canvas>
                         </div>
                     </div>
@@ -1185,6 +1193,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Script d'internationalisation -->
+    <script src="multi_lang.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
