@@ -50,6 +50,44 @@ function initCharts() {
     // Définir des dimensions fixes pour les graphiques
     const chartHeight = 350;
     
+    // Définir les couleurs et styles communs
+    Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = '#6c757d';
+    
+    // Options communes pour les graphiques
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    padding: 20,
+                    usePointStyle: true,
+                    pointStyle: 'circle'
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                titleColor: '#4361ee',
+                bodyColor: '#343a40',
+                borderColor: '#e9ecef',
+                borderWidth: 1,
+                padding: 12,
+                bodyFont: {
+                    size: 13
+                },
+                titleFont: {
+                    size: 14,
+                    weight: 'bold'
+                },
+                boxPadding: 5,
+                usePointStyle: true,
+            }
+        }
+    };
+    
     // Graphique d'évolution des suspens
     const suspensCtx = document.getElementById('suspensChart');
     if (suspensCtx) {
@@ -68,35 +106,59 @@ function initCharts() {
                         data: [45, 42, 50, 48, 40, 42],
                         borderColor: '#ff9800',
                         backgroundColor: 'rgba(255, 152, 0, 0.1)',
-                        tension: 0.4,
+                        borderWidth: 3,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#ff9800',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6,
+                        pointHoverBorderWidth: 3,
                         fill: true
                     },
                     {
                         label: 'Paiements non rapprochés',
-                        data: [30, 25, 35, 28, 32, 28],
-                        borderColor: '#3f51b5',
-                        backgroundColor: 'rgba(63, 81, 181, 0.1)',
-                        tension: 0.4,
+                        data: [28, 32, 25, 30, 26, 22],
+                        borderColor: '#4361ee',
+                        backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#4361ee',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6,
+                        pointHoverBorderWidth: 3,
                         fill: true
                     }
                 ]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top'
-                    }
-                },
+                ...commonOptions,
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Nombre'
+                        grid: {
+                            borderDash: [5, 5],
+                            drawBorder: false,
+                        },
+                        ticks: {
+                            padding: 10
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            padding: 10
                         }
                     }
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false
                 }
             }
         });
@@ -115,22 +177,31 @@ function initCharts() {
             data: {
                 labels: ['< 15 jours', '15-30 jours', '30-60 jours', '> 60 jours'],
                 datasets: [{
-                    data: [10, 5, 4, 3],
+                    data: [42, 28, 18, 12],
                     backgroundColor: [
                         '#4caf50',
                         '#ff9800',
                         '#f44336',
                         '#9c27b0'
                     ],
-                    borderWidth: 1
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    hoverOffset: 6,
+                    borderRadius: 3
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                ...commonOptions,
+                cutout: '65%',
                 plugins: {
+                    ...commonOptions.plugins,
                     legend: {
-                        position: 'right'
+                        position: 'right',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
                     }
                 }
             }
