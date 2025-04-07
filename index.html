@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecoFinance - Rapprochement Bancaire</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>RecoFinance</h3>
+                <p class="text-muted">Solution de rapprochement</p>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#" data-view="dashboard"><i class="fas fa-home"></i> Tableau de bord</a>
+                </li>
+                <li>
+                    <a href="#" data-view="receivable"><i class="fas fa-money-bill-wave"></i> Rapprochement Paiements</a>
+                </li>
+                <li>
+                    <a href="#" data-view="pivot"><i class="fas fa-file-invoice"></i> Suivi des Suspens</a>
+                </li>
+                <li>
+                    <a href="#" data-view="import"><i class="fas fa-file-import"></i> Importer Données</a>
+                </li>
+                <li>
+                    <a href="#" data-view="settings"><i class="fas fa-cog"></i> Paramètres</a>
+                </li>
+            </ul>
+
+            <div class="user-info mt-auto">
+                <img src="https://via.placeholder.com/50" alt="User" class="rounded-circle">
+                <span>John Doe</span>
+                <p class="text-muted">Comptable</p>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-light">
+                        <i class="fas fa-align-left"></i>
+                    </button>
+                    
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Rechercher...">
+                    </div>
+
+                    <div class="ms-auto d-flex align-items-center">
+                        <div class="notifications me-3">
+                            <i class="fas fa-bell position-relative">
+                                <span class="notification-badge">3</span>
+                            </i>
+                        </div>
+                        <div class="user-dropdown">
+                            <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle">
+                            <span>John Doe <i class="fas fa-chevron-down small-icon"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content Views -->
+            <div class="view-container">
+                <!-- Dashboard View -->
+                <div id="dashboard-view" class="content-view active">
+                    <h2>Tableau de bord</h2>
+                    
+                    <div class="kpi-container">
+                        <div class="kpi-card">
+                            <div class="kpi-icon bg-primary">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="kpi-details">
+                                <h3>28 500 €</h3>
+                                <p>Paiements non rapprochés</p>
+                                <span class="kpi-count">15 transactions</span>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card">
+                            <div class="kpi-icon bg-warning">
+                                <i class="fas fa-hourglass-half"></i>
+                            </div>
+                            <div class="kpi-details">
+                                <h3>42 750 €</h3>
+                                <p>Suspens ouverts</p>
+                                <span class="kpi-count">22 transactions</span>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card">
+                            <div class="kpi-icon bg-danger">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="kpi-details">
+                                <h3>15 200 €</h3>
+                                <p>Suspens > 30 jours</p>
+                                <span class="kpi-count">7 transactions</span>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card">
+                            <div class="kpi-icon bg-success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="kpi-details">
+                                <h3>152 350 €</h3>
+                                <p>Rapprochés (ce mois)</p>
+                                <span class="kpi-count">64 transactions</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-charts-container">
+                        <div class="dashboard-chart">
+                            <h4>Évolution des suspens</h4>
+                            <canvas id="suspensChart"></canvas>
+                        </div>
+                        <div class="dashboard-chart">
+                            <h4>Répartition par âge des suspens</h4>
+                            <canvas id="ageDistributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-tables">
+                        <div class="dashboard-table">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4>Suspens les plus anciens</h4>
+                                <a href="#" class="btn btn-sm btn-outline-primary" data-view="pivot">Voir tous</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Client</th>
+                                            <th>Référence</th>
+                                            <th>Âge (jours)</th>
+                                            <th>Montant</th>
+                                            <th>État</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Durand & Cie</td>
+                                            <td>FAC-2025-0042</td>
+                                            <td><span class="badge bg-danger">45</span></td>
+                                            <td>4 250,00 €</td>
+                                            <td><span class="status status-investigate">En investigation</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Martin SA</td>
+                                            <td>FAC-2025-0039</td>
+                                            <td><span class="badge bg-danger">42</span></td>
+                                            <td>3 780,00 €</td>
+                                            <td><span class="status status-followup">À relancer</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bernard SARL</td>
+                                            <td>FAC-2025-0051</td>
+                                            <td><span class="badge bg-danger">36</span></td>
+                                            <td>2 450,00 €</td>
+                                            <td><span class="status status-open">Ouvert</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-table">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4>Suggestions de rapprochement</h4>
+                                <a href="#" class="btn btn-sm btn-outline-primary" data-view="receivable">Voir tous</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Paiement</th>
+                                            <th>Date</th>
+                                            <th>Montant</th>
+                                            <th>Confiance</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>VIR Petit SARL</td>
+                                            <td>05/04/2025</td>
+                                            <td>3 450,00 €</td>
+                                            <td><div class="confidence-bar high"></div></td>
+                                            <td><button class="btn btn-sm btn-success">Valider</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>VIR TECH Solutions</td>
+                                            <td>06/04/2025</td>
+                                            <td>5 675,00 €</td>
+                                            <td><div class="confidence-bar medium"></div></td>
+                                            <td><button class="btn btn-sm btn-success">Valider</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CHQ 1278452</td>
+                                            <td>07/04/2025</td>
+                                            <td>2 150,00 €</td>
+                                            <td><div class="confidence-bar low"></div></td>
+                                            <td><button class="btn btn-sm btn-outline-primary">Vérifier</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receivable View (Rapprochement Paiements) -->
+                <div id="receivable-view" class="content-view">
+                    <h2>Rapprochement des Paiements</h2>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p class="text-muted">Rapprochez facilement les paiements reçus avec les suspens/factures en attente.</p>
+                        <div class="d-flex gap-2">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" placeholder="Rechercher un paiement...">
+                            </div>
+                            <button class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filtres</button>
+                        </div>
+                    </div>
+                    
+                    <div class="split-view">
+                        <!-- Panel Gauche - Liste des Paiements -->
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3>Paiements reçus non rapprochés</h3>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt"></i></button>
+                                    <select class="form-select form-select-sm d-inline-block" style="width: auto;">
+                                        <option>Tous les paiements</option>
+                                        <option>Avec suggestions</option>
+                                        <option>Sans suggestions</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="panel-filters">
+                                <select class="form-select form-select-sm">
+                                    <option>Tous les montants</option>
+                                    <option>< 1 000 €</option>
+                                    <option>1 000 € - 5 000 €</option>
+                                    <option>> 5 000 €</option>
+                                </select>
+                                <select class="form-select form-select-sm">
+                                    <option>Cette semaine</option>
+                                    <option>7 derniers jours</option>
+                                    <option>30 derniers jours</option>
+                                    <option>Personnalisé</option>
+                                </select>
+                            </div>
+                            <div class="panel-content">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="receivable-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Libellé</th>
+                                                <th>Montant</th>
+                                                <th>Client Identifié</th>
+                                                <th class="status-cell">Statut</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-id="PAY001">
+                                                <td>07/04/2025</td>
+                                                <td>VIR Dupont SARL 2587963</td>
+                                                <td>3 450,00 €</td>
+                                                <td>Dupont SARL</td>
+                                                <td class="status-cell"><span class="status status-pending">Suggestion disponible</span></td>
+                                                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button></td>
+                                            </tr>
+                                            <tr data-id="PAY002">
+                                                <td>06/04/2025</td>
+                                                <td>VIR TECH Solutions F087</td>
+                                                <td>5 675,00 €</td>
+                                                <td>TECH Solutions</td>
+                                                <td class="status-cell"><span class="status status-pending">Suggestion disponible</span></td>
+                                                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button></td>
+                                            </tr>
+                                            <tr data-id="PAY003">
+                                                <td>05/04/2025</td>
+                                                <td>VIR Martin Industries paiement</td>
+                                                <td>8 320,00 €</td>
+                                                <td>Martin Industries</td>
+                                                <td class="status-cell"><span class="status status-open">Non rapproché</span></td>
+                                                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button></td>
+                                            </tr>
+                                            <tr data-id="PAY004">
+                                                <td>05/04/2025</td>
+                                                <td>CHQ 1278452 Petit SARL</td>
+                                                <td>2 150,00 €</td>
+                                                <td>Petit SARL</td>
+                                                <td class="status-cell"><span class="status status-pending">Suggestion disponible</span></td>
+                                                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button></td>
+                                            </tr>
+                                            <tr data-id="PAY005">
+                                                <td>04/04/2025</td>
+                                                <td>VIR Bernard F12-25</td>
+                                                <td>4 780,00 €</td>
+                                                <td>Bernard SARL</td>
+                                                <td class="status-cell"><span class="status status-open">Non rapproché</span></td>
+                                                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button></td>
+                                            </tr>
+                                            <tr data-id="PAY006">
+                                                <td>03/04/2025</td>
+                                                <td>VIR Paiement F092</td>
+                                                <td>1 250,00 €</td>
+                                                <td>-</td>
+                                                <td class="status-cell"><span class="status status-investigate">En investigation</span></td>
+                                                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button></td>
+                                            </tr>
+                                            <tr data-id="PAY007">
+                                                <td>02/04/2025</td>
+                                                <td>VIR Durand & Cie</td>
+                                                <td>2 875,00 €</td>
+                                                <td>Durand & Cie</td>
+                                                <td class="status-cell"><span class="status status-open">Non rapproché</span></td>
+                                                <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-chevron-right"></i></button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <nav aria-label="Pagination des paiements">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item disabled"><a class="page-link" href="#">Précédent</a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">Suivant</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted">15 paiements non rapprochés</span>
+                                    <button class="btn btn-primary"><i class="fas fa-file-export"></i> Exporter</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Panel Droit - Détails et Suggestions -->
+                        <div class="panel" id="payment-details-panel">
+                            <div class="panel-header">
+                                <h3>Détails du paiement</h3>
+                                <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-times"></i></button>
+                            </div>
+                            <div class="panel-content">
+                                <div class="payment-details mb-4">
+                                    <h4>VIR Dupont SARL 2587963</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Date:</strong> 07/04/2025</p>
+                                            <p><strong>Montant:</strong> 3 450,00 €</p>
+                                            <p><strong>Référence:</strong> VIR 2587963</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Client identifié:</strong> Dupont SARL</p>
+                                            <p><strong>Compte:</strong> 512000</p>
+                                            <p><strong>Statut:</strong> Non rapproché</p>
+                                        </div>
+                                    </div>
+                                    <div class="payment-action-buttons mt-3">
+                                        <button class="btn btn-sm btn-outline-primary me-2" data-action="investigate"><i class="fas fa-search"></i> Marquer en investigation</button>
+                                        <button class="btn btn-sm btn-outline-primary me-2" data-action="note"><i class="fas fa-sticky-note"></i> Ajouter une note</button>
+                                        <button class="btn btn-sm btn-outline-danger" data-action="ignore"><i class="fas fa-ban"></i> Ignorer ce paiement</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="match-container">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4>Suggestions de rapprochement</h4>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-2"><i class="fas fa-search"></i> Chercher manuellement</button>
+                                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt"></i> Rafraîchir</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="match-suggestions">
+                                        <!-- Les suggestions seront chargées dynamiquement via JavaScript -->
+                                    </div>
+                                </div>
+                                
+                                <div class="manual-match mt-4">
+                                    <h4>Rapprochement manuel</h4>
+                                    <p class="text-muted">Recherchez et sélectionnez un ou plusieurs suspens à rapprocher avec ce paiement.</p>
+                                    
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="Rechercher par client, facture, montant...">
+                                        <button class="btn btn-outline-primary"><i class="fas fa-search"></i></button>
+                                    </div>
+                                    
+                                    <div class="selected-matches">
+                                        <p class="text-muted">Aucun suspens sélectionné</p>
+                                        <!-- Liste des suspens sélectionnés manuellement -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="text-muted">Total sélectionné: <strong>0,00 €</strong></span>
+                                        <span class="ms-3 text-muted">Écart: <strong class="text-danger">3 450,00 €</strong></span>
+                                    </div>
+                                    <button class="btn btn-success" disabled><i class="fas fa-check"></i> Valider le rapprochement</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pivot View (Suivi des Suspens) -->
+                <div id="pivot-view" class="content-view">
+                    <h2>Suivi des Suspens</h2>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p class="text-muted">Suivez et gérez tous les suspens en attente de rapprochement.</p>
+                        <div class="d-flex gap-2">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" placeholder="Rechercher un suspens...">
+                            </div>
+                            <button class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filtres</button>
+                        </div>
+                    </div>
+                    
+                    <div class="suspens-filters">
+                        <div class="filter-group">
+                            <label>Âge:</label>
+                            <select class="form-select form-select-sm">
+                                <option>Tous</option>
+                                <option>< 15 jours</option>
+                                <option>15-30 jours</option>
+                                <option>30-60 jours</option>
+                                <option>> 60 jours</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Statut:</label>
+                            <select class="form-select form-select-sm">
+                                <option>Tous</option>
+                                <option>Ouverts</option>
+                                <option>En investigation</option>
+                                <option>À relancer</option>
+                                <option>Validé - Attente Annulation</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Montant:</label>
+                            <select class="form-select form-select-sm">
+                                <option>Tous</option>
+                                <option>< 1 000 €</option>
+                                <option>1 000 € - 5 000 €</option>
+                                <option>> 5 000 €</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Client:</label>
+                            <select class="form-select form-select-sm">
+                                <option>Tous</option>
+                                <option>Dupont SARL</option>
+                                <option>TECH Solutions</option>
+                                <option>Martin Industries</option>
+                                <option>Durand & Cie</option>
+                                <option>Bernard SARL</option>
+                            </select>
+                        </div>
+                        <div class="ms-auto">
+                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-save"></i> Sauvegarder filtres</button>
+                        </div>
+                    </div>
+                    
+                    <div class="suspens-table-container">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="suspens-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date Création</th>
+                                        <th>Âge (j)</th>
+                                        <th>Client</th>
+                                        <th>Référence</th>
+                                        <th>Montant</th>
+                                        <th>Statut</th>
+                                        <th>Dernière Action</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-id="SUS001">
+                                        <td>23/02/2025</td>
+                                        <td><span class="badge bg-danger">43</span></td>
+                                        <td>Durand & Cie</td>
+                                        <td>FAC-2025-0042</td>
+                                        <td>4 250,00 €</td>
+                                        <td><span class="status status-investigate">En investigation</span></td>
+                                        <td>Contact client 25/03</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-id="SUS002">
+                                        <td>26/02/2025</td>
+                                        <td><span class="badge bg-danger">40</span></td>
+                                        <td>Martin SA</td>
+                                        <td>FAC-2025-0039</td>
+                                        <td>3 780,00 €</td>
+                                        <td><span class="status status-followup">À relancer</span></td>
+                                        <td>Email envoyé 02/04</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-id="SUS003">
+                                        <td>02/03/2025</td>
+                                        <td><span class="badge bg-danger">36</span></td>
+                                        <td>Bernard SARL</td>
+                                        <td>FAC-2025-0051</td>
+                                        <td>2 450,00 €</td>
+                                        <td><span class="status status-open">Ouvert</span></td>
+                                        <td>-</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-id="SUS004">
+                                        <td>10/03/2025</td>
+                                        <td><span class="badge bg-warning">28</span></td>
+                                        <td>TECH Solutions</td>
+                                        <td>FAC-2025-0063</td>
+                                        <td>5 675,00 €</td>
+                                        <td><span class="status status-pending">Suggestion disponible</span></td>
+                                        <td>-</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-success"><i class="fas fa-link"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-id="SUS005">
+                                        <td>15/03/2025</td>
+                                        <td><span class="badge bg-warning">23</span></td>
+                                        <td>Dupont SARL</td>
+                                        <td>FAC-2025-0087</td>
+                                        <td>3 450,00 €</td>
+                                        <td><span class="status status-pending">Suggestion disponible</span></td>
+                                        <td>-</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-success"><i class="fas fa-link"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-id="SUS006">
+                                        <td>20/03/2025</td>
+                                        <td><span class="badge bg-warning">18</span></td>
+                                        <td>Petit SARL</td>
+                                        <td>FAC-2025-0092</td>
+                                        <td>2 150,00 €</td>
+                                        <td><span class="status status-pending">Suggestion disponible</span></td>
+                                        <td>-</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-success"><i class="fas fa-link"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-id="SUS007">
+                                        <td>25/03/2025</td>
+                                        <td><span class="badge bg-info">13</span></td>
+                                        <td>Martin Industries</td>
+                                        <td>FAC-2025-0102</td>
+                                        <td>8 320,00 €</td>
+                                        <td><span class="status status-open">Ouvert</span></td>
+                                        <td>-</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-id="SUS008">
+                                        <td>28/03/2025</td>
+                                        <td><span class="badge bg-info">10</span></td>
+                                        <td>Durand & Cie</td>
+                                        <td>FAC-2025-0115</td>
+                                        <td>2 875,00 €</td>
+                                        <td><span class="status status-open">Ouvert</span></td>
+                                        <td>-</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
+                                                <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <span class="text-muted">Affichage de 1-8 sur 22 suspens</span>
+                            </div>
+                            <nav aria-label="Pagination des suspens">
+                                <ul class="pagination">
+                                    <li class="page-item disabled"><a class="page-link" href="#">Précédent</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">Suivant</a></li>
+                                </ul>
+                            </nav>
+                            <div>
+                                <button class="btn btn-primary"><i class="fas fa-file-export"></i> Exporter</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal pour les détails suspens -->
+                    <div class="modal fade" id="suspensDetailModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Détails du suspens</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <h4>FAC-2025-0042</h4>
+                                        <span class="status status-investigate">En investigation</span>
+                                    </div>
+                                    
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <p><strong>Client:</strong> Durand & Cie</p>
+                                            <p><strong>Date création:</strong> 23/02/2025</p>
+                                            <p><strong>Âge:</strong> 43 jours</p>
+                                            <p><strong>Référence:</strong> FAC-2025-0042</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Montant:</strong> 4 250,00 €</p>
+                                            <p><strong>Compte pivot:</strong> 471000</p>
+                                            <p><strong>Compte client:</strong> 411DUR</p>
+                                            <p><strong>Date d'échéance:</strong> 25/03/2025</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5>Actions disponibles</h5>
+                                        <div class="btn-toolbar">
+                                            <button class="btn btn-outline-primary me-2" data-action="check-swift"><i class="fas fa-exchange-alt"></i> Vérifier SWIFT</button>
+                                            <button class="btn btn-outline-primary me-2" data-action="followup"><i class="fas fa-bell"></i> Marquer à relancer</button>
+                                            <button class="btn btn-outline-primary me-2" data-action="search-payment"><i class="fas fa-search"></i> Chercher paiement</button>
+                                            <button class="btn btn-outline-secondary"><i class="fas fa-sticky-note"></i> Ajouter note</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h5>Historique des actions</h5>
+                                        <div class="timeline">
+                                            <div class="timeline-item">
+                                                <div class="timeline-date">04/04/2025</div>
+                                                <div class="timeline-content">
+                                                    <p><strong>Sophie Martin</strong> a ajouté une note: "Client contacté par téléphone, promet un paiement pour la semaine prochaine."</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-date">25/03/2025</div>
+                                                <div class="timeline-content">
+                                                    <p><strong>Jean Dupont</strong> a changé le statut en <span class="status status-investigate">En investigation</span></p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-date">15/03/2025</div>
+                                                <div class="timeline-content">
+                                                    <p><strong>Jean Dupont</strong> a vérifié SWIFT. Aucun message trouvé.</p>
+                                                </div>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <div class="timeline-date">23/02/2025</div>
+                                                <div class="timeline-content">
+                                                    <p>Création automatique du suspens</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    <button type="button" class="btn btn-primary">Mettre à jour</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Import Data View -->
+                <div id="import-view" class="content-view">
+                    <h2>Importer des Données</h2>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p class="text-muted">Importez facilement les données de paiements et de suspens dans le système.</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="import-section">
+                                <h4>Paiements (Receivable)</h4>
+                                <p class="text-muted">Importez les paiements reçus depuis votre compte bancaire ou votre système de gestion.</p>
+                                
+                                <div class="import-method mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="receivable-import-method" id="receivable-api" checked>
+                                        <label class="form-check-label" for="receivable-api">API Bancaire</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="receivable-import-method" id="receivable-file">
+                                        <label class="form-check-label" for="receivable-file">Fichier</label>
+                                    </div>
+                                </div>
+                                
+                                <div id="receivable-api-form">
+                                    <div class="mb-3">
+                                        <label class="form-label">Sélectionner un compte bancaire</label>
+                                        <select class="form-select">
+                                            <option>Compte principal - FR76 1234 5678 9012 3456 7890 123</option>
+                                            <option>Compte secondaire - FR76 9876 5432 1098 7654 3210 987</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Période</label>
+                                        <div class="d-flex gap-2">
+                                            <input type="date" class="form-control" value="2025-04-01">
+                                            <input type="date" class="form-control" value="2025-04-07">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i> Importer via API</button>
+                                </div>
+                                
+                                <div id="receivable-file-form" style="display: none;">
+                                    <div class="dropzone mb-3">
+                                        <i class="fas fa-file-upload"></i>
+                                        <h5>Déposez vos fichiers ici</h5>
+                                        <p class="text-muted">Formats acceptés: CSV, Excel, CAMT.053</p>
+                                        <input type="file" id="receivable-file-input" class="d-none" multiple>
+                                        <button class="btn btn-outline-primary" onclick="document.getElementById('receivable-file-input').click()">Parcourir les fichiers</button>
+                                    </div>
+                                    <button class="btn btn-primary" disabled><i class="fas fa-upload"></i> Importer les fichiers</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="import-section">
+                                <h4>Suspens (Pivot)</h4>
+                                <p class="text-muted">Importez les suspens générés par votre application de gestion.</p>
+                                
+                                <div class="import-method mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="pivot-import-method" id="pivot-api" checked>
+                                        <label class="form-check-label" for="pivot-api">API Gestion</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="pivot-import-method" id="pivot-file">
+                                        <label class="form-check-label" for="pivot-file">Fichier</label>
+                                    </div>
+                                </div>
+                                
+                                <div id="pivot-api-form">
+                                    <div class="mb-3">
+                                        <label class="form-label">Source</label>
+                                        <select class="form-select">
+                                            <option>Application de gestion interne</option>
+                                            <option>ERP principal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Période</label>
+                                        <div class="d-flex gap-2">
+                                            <input type="date" class="form-control" value="2025-04-01">
+                                            <input type="date" class="form-control" value="2025-04-07">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i> Importer via API</button>
+                                </div>
+                                
+                                <div id="pivot-file-form" style="display: none;">
+                                    <div class="dropzone mb-3">
+                                        <i class="fas fa-file-upload"></i>
+                                        <h5>Déposez vos fichiers ici</h5>
+                                        <p class="text-muted">Formats acceptés: CSV, Excel</p>
+                                        <input type="file" id="pivot-file-input" class="d-none" multiple>
+                                        <button class="btn btn-outline-primary" onclick="document.getElementById('pivot-file-input').click()">Parcourir les fichiers</button>
+                                    </div>
+                                    <button class="btn btn-primary" disabled><i class="fas fa-upload"></i> Importer les fichiers</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <div class="import-section">
+                                <h4>Factures</h4>
+                                <p class="text-muted">Importez les détails des factures depuis votre application de gestion.</p>
+                                
+                                <div class="import-method mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="invoice-import-method" id="invoice-api" checked>
+                                        <label class="form-check-label" for="invoice-api">API Gestion</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="invoice-import-method" id="invoice-file">
+                                        <label class="form-check-label" for="invoice-file">Fichier</label>
+                                    </div>
+                                </div>
+                                
+                                <div id="invoice-api-form">
+                                    <div class="mb-3">
+                                        <label class="form-label">Source</label>
+                                        <select class="form-select">
+                                            <option>Application de gestion interne</option>
+                                            <option>ERP principal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Période</label>
+                                        <div class="d-flex gap-2">
+                                            <input type="date" class="form-control" value="2025-03-01">
+                                            <input type="date" class="form-control" value="2025-04-07">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary"><i class="fas fa-cloud-download-alt"></i> Importer via API</button>
+                                </div>
+                                
+                                <div id="invoice-file-form" style="display: none;">
+                                    <div class="dropzone mb-3">
+                                        <i class="fas fa-file-upload"></i>
+                                        <h5>Déposez vos fichiers ici</h5>
+                                        <p class="text-muted">Formats acceptés: CSV, Excel</p>
+                                        <input type="file" id="invoice-file-input" class="d-none" multiple>
+                                        <button class="btn btn-outline-primary" onclick="document.getElementById('invoice-file-input').click()">Parcourir les fichiers</button>
+                                    </div>
+                                    <button class="btn btn-primary" disabled><i class="fas fa-upload"></i> Importer les fichiers</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="import-section import-history">
+                        <h4>Historique des importations</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Source</th>
+                                        <th>Utilisateur</th>
+                                        <th>Éléments importés</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>07/04/2025 10:15</td>
+                                        <td>Paiements</td>
+                                        <td>API Bancaire</td>
+                                        <td>Jean Dupont</td>
+                                        <td>12</td>
+                                        <td><span class="badge bg-success">Succès</span></td>
+                                        <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>05/04/2025 14:30</td>
+                                        <td>Suspens</td>
+                                        <td>API Gestion</td>
+                                        <td>Sophie Martin</td>
+                                        <td>8</td>
+                                        <td><span class="badge bg-success">Succès</span></td>
+                                        <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>01/04/2025 09:45</td>
+                                        <td>Factures</td>
+                                        <td>API Gestion</td>
+                                        <td>Jean Dupont</td>
+                                        <td>25</td>
+                                        <td><span class="badge bg-success">Succès</span></td>
+                                        <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>28/03/2025 16:20</td>
+                                        <td>Paiements</td>
+                                        <td>Fichier CSV</td>
+                                        <td>Sophie Martin</td>
+                                        <td>5</td>
+                                        <td><span class="badge bg-warning">Partiel</span></td>
+                                        <td><button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div id="settings-view" class="content-view">
+                    <h2>Paramètres</h2>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p class="text-muted">Configurez votre application de rapprochement selon vos besoins.</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="settings-card">
+                                <h4>Paramètres généraux</h4>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Langue</label>
+                                    <select class="form-select">
+                                        <option selected>Français</option>
+                                        <option>English</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Format de date</label>
+                                    <select class="form-select">
+                                        <option selected>JJ/MM/AAAA</option>
+                                        <option>MM/JJ/AAAA</option>
+                                        <option>AAAA-MM-JJ</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Format des montants</label>
+                                    <select class="form-select">
+                                        <option selected>1 234,56 €</option>
+                                        <option>1,234.56 €</option>
+                                        <option>1.234,56 €</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="auto-refresh" checked>
+                                    <label class="form-check-label" for="auto-refresh">Actualisation automatique (15 min)</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="settings-card">
+                                <h4>Intégrations</h4>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Application de gestion</label>
+                                    <div class="d-flex gap-2">
+                                        <select class="form-select">
+                                            <option selected>Application de gestion interne</option>
+                                            <option>ERP principal</option>
+                                        </select>
+                                        <button class="btn btn-outline-primary"><i class="fas fa-cog"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">API bancaire</label>
+                                    <div class="d-flex gap-2">
+                                        <select class="form-select">
+                                            <option selected>Banque Principale SA</option>
+                                            <option>Crédit Industriel</option>
+                                        </select>
+                                        <button class="btn btn-outline-primary"><i class="fas fa-cog"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Mode d'intégration avec l'application de gestion</label>
+                                    <select class="form-select">
+                                        <option selected>Via API (synchronisation automatique)</option>
+                                        <option>Export/Import manuel</option>
+                                        <option>Information seule (sans synchronisation)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="swift-check" checked>
+                                    <label class="form-check-label" for="swift-check">Activer l'intégration SWIFT</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="settings-card">
+                                <h4>Règles de rapprochement</h4>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Seuil de confiance minimal pour suggestions automatiques</label>
+                                    <select class="form-select">
+                                        <option>Élevé (>90%)</option>
+                                        <option selected>Moyen (>70%)</option>
+                                        <option>Faible (>50%)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Écart maximum toléré</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" value="5.00">
+                                        <span class="input-group-text">€</span>
+                                    </div>
+                                    <div class="form-text">Les écarts inférieurs à ce montant seront automatiquement rapprochés</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Compte pour écarts</label>
+                                    <input type="text" class="form-control" value="658000">
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="auto-validate" checked>
+                                    <label class="form-check-label" for="auto-validate">Valider automatiquement les suggestions à confiance élevée</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="settings-card">
+                                <h4>Alertes et notifications</h4>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Seuil d'alerte pour suspens anciens</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">Modéré</span>
+                                                <input type="number" class="form-control" value="15">
+                                                <span class="input-group-text">jours</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-text">Critique</span>
+                                                <input type="number" class="form-control" value="30">
+                                                <span class="input-group-text">jours</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Notifications par email</label>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="email-daily" checked>
+                                        <label class="form-check-label" for="email-daily">Rapport quotidien</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="email-critical" checked>
+                                        <label class="form-check-label" for="email-critical">Alertes suspens critiques</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="email-import">
+                                        <label class="form-check-label" for="email-import">Confirmation d'importation</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Destinataires des alertes</label>
+                                    <input type="text" class="form-control" value="comptabilite@entreprise.fr; tresorerie@entreprise.fr">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <div class="settings-card">
+                                <h4>Gestion des utilisateurs</h4>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Nom</th>
+                                                <th>Email</th>
+                                                <th>Rôle</th>
+                                                <th>Dernière connexion</th>
+                                                <th>Statut</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Jean Dupont</td>
+                                                <td>jean.dupont@entreprise.fr</td>
+                                                <td>Administrateur</td>
+                                                <td>07/04/2025 11:42</td>
+                                                <td><span class="badge bg-success">Actif</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sophie Martin</td>
+                                                <td>sophie.martin@entreprise.fr</td>
+                                                <td>Comptable</td>
+                                                <td>07/04/2025 09:15</td>
+                                                <td><span class="badge bg-success">Actif</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Pierre Legrand</td>
+                                                <td>pierre.legrand@entreprise.fr</td>
+                                                <td>Lecture seule</td>
+                                                <td>05/04/2025 16:30</td>
+                                                <td><span class="badge bg-success">Actif</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <button class="btn btn-primary mt-3"><i class="fas fa-user-plus"></i> Ajouter un utilisateur</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end mb-5">
+                        <button class="btn btn-secondary me-2">Annuler</button>
+                        <button class="btn btn-primary">Enregistrer les paramètres</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals will be added in next parts -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
