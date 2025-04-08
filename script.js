@@ -1,44 +1,97 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Toggle Sidebar
-    document.getElementById('sidebarCollapse').addEventListener('click', function() {
-        document.getElementById('sidebar').classList.toggle('collapsed');
-    });
-    
-    // Navigation entre les vues
-    document.querySelectorAll('[data-view]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetView = this.getAttribute('data-view');
-            
-            // Désactiver tous les liens de navigation
-            document.querySelectorAll('.sidebar ul li').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Activer le lien cliqué
-            if (this.parentElement.tagName === 'LI') {
-                this.parentElement.classList.add('active');
-            }
-            
-            // Masquer toutes les vues
-            document.querySelectorAll('.content-view').forEach(view => {
-                view.classList.remove('active');
-            });
-            
-            // Afficher la vue cible
-            document.getElementById(targetView + '-view').classList.add('active');
-        });
-    });
-    
-    // Initialisation des graphiques
-    initCharts();
-    
-    // Initialisation des écouteurs d'événements pour les tableaux
-    initTableListeners();
+// Script principal pour l'application de rapprochement
 
-    // Initialisation des écouteurs pour les modals et formulaires
-    initModalListeners();
+// Toggle Sidebar seulement - le reste est géré par navigation.js
+document.getElementById('sidebarCollapse').addEventListener('click', function() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
 });
+
+/* 
+ * IMPORTANT: La navigation est maintenant gérée par navigation.js
+ * Ce code est désactivé pour éviter les conflits
+ */
+/*
+// Navigation entre les vues - DÉSACTIVÉ
+document.querySelectorAll('[data-view]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetView = this.getAttribute('data-view');
+        
+        // Activer l'élément de menu correspondant
+        activateMenuItem(targetView);
+        
+        // Afficher la vue correspondante
+        showView(targetView);
+        
+        // Sauvegarder la vue active
+        sessionStorage.setItem('activeView', targetView);
+        
+        // Appliquer les filtres spécifiques à la vue
+        if (window.filterManager) {
+            window.filterManager.applyFilters(targetView);
+        }
+    });
+});
+
+// Fonction pour activer un élément de menu - DÉSACTIVÉE
+function activateMenuItem(viewName) {
+    // Supprimer la classe active de tous les éléments de menu
+    document.querySelectorAll('.sidebar ul li').forEach(item => {
+        item.className = ''; // Réinitialisation complète des classes
+    });
+    
+    // Activer l'élément de menu correspondant à la vue
+    const menuItem = document.getElementById('menu-' + viewName);
+    if (menuItem) {
+        menuItem.className = 'active';
+    }
+}
+
+// Fonction pour afficher une vue - DÉSACTIVÉE
+function showView(viewName) {
+    // Masquer toutes les vues
+    document.querySelectorAll('.content-view').forEach(view => {
+        view.classList.remove('active');
+    });
+    
+    // Afficher la vue demandée
+    const view = document.getElementById(viewName + '-view');
+    if (view) {
+        view.classList.add('active');
+    }
+}
+
+// Initialisation au chargement de la page - DÉSACTIVÉE
+document.addEventListener('DOMContentLoaded', function() {
+    // Récupérer la vue active ou utiliser dashboard par défaut
+    const activeView = sessionStorage.getItem('activeView') || 'dashboard';
+    
+    // Activer l'élément de menu correspondant
+    activateMenuItem(activeView);
+    
+    // Afficher la vue correspondante
+    showView(activeView);
+});
+*/
+
+// Écouter les changements de booking
+document.addEventListener('bookingChanged', function(event) {
+    // Appliquer les filtres en fonction du booking
+    if (window.filterManager) {
+        window.filterManager.applyFilters();
+    }
+    
+    // Mettre à jour les tableaux de bord et statistiques
+    updateDashboardStats(event.detail.booking);
+});
+
+// Initialisation des graphiques
+initCharts();
+
+// Initialisation des écouteurs d'événements pour les tableaux
+initTableListeners();
+
+// Initialisation des écouteurs pour les modals et formulaires
+initModalListeners();
 
 // Fonction d'initialisation des graphiques
 function initCharts() {
@@ -963,6 +1016,96 @@ function showImportDetails(importId) {
     importDetailsModal.show();
 }
 
+// Fonction pour mettre à jour les statistiques du tableau de bord en fonction du booking sélectionné
+function updateDashboardStats(bookingId) {
+    // Si nous sommes sur "toutes les bookings", afficher les statistiques globales
+    const isAllBookings = bookingId === 'all';
+    
+    // Récupérer la configuration du booking sélectionné
+    const bookingConfig = window.bookingManager ? window.bookingManager.getBookingConfig() : null;
+    
+    // Mettre à jour les indicateurs clés
+    updateKeyIndicators(bookingId, bookingConfig);
+    
+    // Mettre à jour les graphiques si Chart.js est disponible
+    if (window.Chart) {
+        updateCharts(bookingId, bookingConfig);
+    }
+}
+
+// Mise à jour des indicateurs clés en fonction du booking
+function updateKeyIndicators(bookingId, bookingConfig) {
+    const suspensCounter = document.getElementById('suspens-count');
+    const paymentsCounter = document.getElementById('payments-count');
+    const matchRateElement = document.getElementById('match-rate');
+    
+    // Filtrer les données en fonction du booking
+    if (bookingId === 'all') {
+        // Afficher toutes les données
+        if (suspensCounter) suspensCounter.textContent = '42';
+        if (paymentsCounter) paymentsCounter.textContent = '156';
+        if (matchRateElement) matchRateElement.textContent = '87%';
+    } else if (bookingConfig) {
+        // Afficher uniquement les données du booking sélectionné (données simulées)
+        const bookingData = {
+            'france': { suspens: '18', payments: '72', matchRate: '92%' },
+            'espagne': { suspens: '12', payments: '38', matchRate: '84%' },
+            'uk': { suspens: '8', payments: '26', matchRate: '79%' },
+            'allemagne': { suspens: '4', payments: '20', matchRate: '91%' }
+        };
+        
+        const data = bookingData[bookingId] || { suspens: '0', payments: '0', matchRate: '0%' };
+        
+        if (suspensCounter) suspensCounter.textContent = data.suspens;
+        if (paymentsCounter) paymentsCounter.textContent = data.payments;
+        if (matchRateElement) matchRateElement.textContent = data.matchRate;
+    }
+}
+
+// Mise à jour des graphiques en fonction du booking
+function updateCharts(bookingId, bookingConfig) {
+    // Récupérer les instances de graphiques
+    const chartInstances = Object.values(Chart.instances);
+    
+    // Mettre à jour le graphique d'évolution des suspens
+    const suspensChart = chartInstances.find(chart => chart.canvas.id === 'suspensChart');
+    if (suspensChart) {
+        // Données simulées par booking
+        const chartData = {
+            'all': [28, 32, 36, 29, 24, 18],
+            'france': [12, 15, 18, 14, 10, 8],
+            'espagne': [8, 9, 10, 7, 6, 5],
+            'uk': [5, 6, 6, 5, 5, 3],
+            'allemagne': [3, 2, 2, 3, 3, 2]
+        };
+        
+        // Mettre à jour les données du graphique
+        if (suspensChart.data && suspensChart.data.datasets && suspensChart.data.datasets.length > 0) {
+            suspensChart.data.datasets[0].data = chartData[bookingId] || chartData['all'];
+            suspensChart.update();
+        }
+    }
+    
+    // Mettre à jour le graphique de répartition par âge
+    const ageChart = chartInstances.find(chart => chart.canvas.id === 'ageDistributionChart');
+    if (ageChart) {
+        // Données simulées par booking
+        const ageData = {
+            'all': [15, 12, 10, 5],
+            'france': [6, 5, 4, 3],
+            'espagne': [4, 3, 3, 2],
+            'uk': [3, 2, 2, 1],
+            'allemagne': [2, 1, 1, 0]
+        };
+        
+        // Mettre à jour les données du graphique
+        if (ageChart.data && ageChart.data.datasets && ageChart.data.datasets.length > 0) {
+            ageChart.data.datasets[0].data = ageData[bookingId] || ageData['all'];
+            ageChart.update();
+        }
+    }
+}
+
 // Initialisation des écouteurs pour la vue des paramètres
 function initSettingsListeners() {
     // Gestion des boutons de configuration dans les paramètres
@@ -1228,12 +1371,3 @@ function showToast(message, type = 'info') {
         this.remove();
     });
 }
-
-// Initialisation des fonctionnalités de l'application au chargement du DOM
-document.addEventListener('DOMContentLoaded', function() {
-    // Code existant...
-    
-    // Activer la vue par défaut (dashboard)
-    document.getElementById('dashboard-view').classList.add('active');
-    document.querySelector('a[data-view="dashboard"]').parentElement.classList.add('active');
-});

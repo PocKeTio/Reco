@@ -1,10 +1,13 @@
-const translations = {
+window.translations_fr = {
     // Éléments généraux
     "app_title": "Application de Rapprochement",
     "dashboard": "Tableau de bord",
-    "payments": "Paiements",
-    "suspens": "Suspens",
-    "imports": "Importations",
+    "payments": "Rapprochement Paiements",
+    "suspens": "Suivi des Suspens",
+    "reverse_suspens": "Réconciliation des Suspens",
+    "reverse_suspens_title": "Suivi de la Réconciliation des Suspens",
+    "reverse_suspens_description": "Suivez et gérez les réconciliations des suspens créées après confirmation de paiement.",
+    "imports": "Importer Données",
     "settings": "Paramètres",
     "logout": "Déconnexion",
 
@@ -12,6 +15,7 @@ const translations = {
     "dashboard_title": "Tableau de bord",
     "receivables_title": "Paiements à rapprocher",
     "suspens_title": "Suspens en attente",
+    "reverse_suspens_title": "Réconciliation des Suspens",
     "import_title": "Importation de données",
     "settings_title": "Paramètres",
 
@@ -90,6 +94,44 @@ const translations = {
     "save": "Enregistrer",
     "cancel": "Annuler",
     
+    // Booking entities et comptes
+    "booking_entity": "Entité de booking",
+    "account": "Compte",
+    "all": "Tous",
+    "all_bookings": "Toutes les entités",
+    "all_accounts": "Tous les comptes",
+    "all_status": "Tous les statuts",
+    "all_periods": "Toutes les périodes",
+    "original_payment": "Paiement d'origine",
+    "swift_info": "Informations SWIFT",
+    "swift_reference": "Référence SWIFT",
+    "swift_date": "Date du message",
+    "bank_code": "Code banque",
+    "message_type": "Type de message",
+    "payment_notification": "Notification de paiement",
+    "delay_reason": "Motif du délai",
+    "estimated_processing_date": "Date estimée de traitement",
+    "intermediary_bank": "Banque intermédiaire",
+    "detailed_info": "Informations détaillées",
+    "message_history": "Historique des messages",
+    "export_swift_details": "Exporter les détails SWIFT",
+    
+    // Filtres
+    "apply_filters": "Appliquer les filtres",
+    "reset_filters": "Réinitialiser",
+    "period_week": "7 derniers jours",
+    "period_month": "30 derniers jours",
+    "period_quarter": "90 derniers jours",
+    "status_open": "Ouvert",
+    "status_investigate": "En investigation",
+    "status_followup": "À relancer",
+    "status_pending": "Suggestion disponible",
+    "status_matched": "Rapproché",
+    
+    // Paramètres spécifiques
+    "date_range": "Période",
+    "refresh": "Rafraîchir",
+    
     // Notifications et messages
     "match_validated": "Rapprochement validé avec succès!",
     "adjustments_saved": "Ajustements enregistrés avec succès",
@@ -108,10 +150,20 @@ const translations = {
     "view": "Voir",
     "export": "Exporter",
     "delete": "Supprimer",
-    "language": "Langue"
+    "language": "Langue",
+    
+    // Auto-rapprochement
+    "auto_matching": "Rapprochements automatiques",
+    "auto_matching_description": "Les paiements sont automatiquement rapprochés quand tous les tags sont validés (montant exact, référence exacte, etc.)",
+    "date": "Date",
+    "reference": "Référence",
+    "amount": "Montant",
+    "matched_with": "Rapproché avec",
+    "validated_tags": "Tags validés",
+    "status": "Statut"
 };
 
 // Exporter les traductions pour une utilisation dans d'autres fichiers
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = translations;
+    module.exports = window.translations_fr;
 }

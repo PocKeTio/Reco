@@ -1,12 +1,15 @@
-const translations = {
+window.translations_es = {
     // Elementos generales
     "app_title": "Aplicación de Conciliación",
-    "dashboard": "Panel de Control",
-    "payments": "Pagos",
-    "suspens": "Pendientes",
-    "imports": "Importaciones",
-    "settings": "Configuraciones",
-    "logout": "Cerrar Sesión",
+    "dashboard": "Panel de control",
+    "payments": "Conciliación de Pagos",
+    "suspens": "Seguimiento de Pendientes",
+    "reverse_suspens": "Reconciliación de Pendientes",
+    "reverse_suspens_title": "Seguimiento de Reconciliación de Pendientes",
+    "reverse_suspens_description": "Siga y administre las reconciliaciones de pendientes creadas después de la confirmación del pago.",
+    "imports": "Importar Datos",
+    "settings": "Configuración",
+    "logout": "Desconectar",
 
     // Navegación y secciones
     "dashboard_title": "Panel de Control",
@@ -108,10 +111,21 @@ const translations = {
     "view": "Ver",
     "export": "Exportar",
     "delete": "Eliminar",
-    "language": "Idioma"
+    "language": "Idioma",
+    
+    // Auto-conciliación
+    "auto_matching": "Conciliaciones automáticas",
+    "auto_matching_description": "Los pagos se concilian automáticamente cuando todas las etiquetas están validadas (cantidad exacta, referencia exacta, etc.)",
+    "refresh": "Actualizar",
+    "date": "Fecha",
+    "reference": "Referencia",
+    "amount": "Monto",
+    "matched_with": "Conciliado con",
+    "validated_tags": "Etiquetas validadas",
+    "status": "Estado"
 };
 
 // Exportar traducciones para uso en otros archivos
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = translations;
+    module.exports = window.translations_es;
 }

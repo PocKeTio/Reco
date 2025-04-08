@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="suspens-details.css">
 </head>
 <body>
     <div class="wrapper">
@@ -18,19 +19,22 @@
             </div>
 
             <ul class="list-unstyled components">
-                <li class="active">
+                <li id="menu-dashboard">
                     <a href="#" data-view="dashboard"><i class="fas fa-home"></i> <span data-i18n="dashboard">Tableau de bord</span></a>
                 </li>
-                <li>
+                <li id="menu-receivable">
                     <a href="#" data-view="receivable"><i class="fas fa-money-bill-wave"></i> <span data-i18n="payments">Rapprochement Paiements</span></a>
                 </li>
-                <li>
+                <li id="menu-pivot">
                     <a href="#" data-view="pivot"><i class="fas fa-file-invoice"></i> <span data-i18n="suspens">Suivi des Suspens</span></a>
                 </li>
-                <li>
+                <li id="menu-reverse-suspens">
+                    <a href="#" data-view="reverse-suspens"><i class="fas fa-exchange-alt"></i> <span data-i18n="reverse_suspens">Réconciliation des Suspens</span></a>
+                </li>
+                <li id="menu-import">
                     <a href="#" data-view="import"><i class="fas fa-file-import"></i> <span data-i18n="imports">Importer Données</span></a>
                 </li>
-                <li>
+                <li id="menu-settings">
                     <a href="#" data-view="settings"><i class="fas fa-cog"></i> <span data-i18n="settings">Paramètres</span></a>
                 </li>
             </ul>
@@ -46,32 +50,63 @@
         <div id="content">
             <nav class="navbar navbar-expand-lg navbar-light bg-white">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-light">
-                        <i class="fas fa-align-left"></i>
+                    <button type="button" id="sidebarCollapse" class="btn">
+                        <i class="fas fa-bars"></i>
                     </button>
                     
-                    <div class="search-container">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" data-i18n-placeholder="search" placeholder="Rechercher...">
+                    <!-- Booking Selector -->
+                    <div class="booking-selector-container">
+                        <label for="booking-selector" data-i18n="select_booking">Entité :</label>
+                        <div class="dropdown booking-selector">
+                            <button class="btn dropdown-toggle" type="button" id="booking-selector" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="active-booking">France <span class="badge bg-success">•</span></span>
+                            </button>
+                            <ul class="dropdown-menu booking-list" aria-labelledby="booking-selector">
+                                <li class="booking-list-title" data-i18n="my_bookings">Mes entités</li>
+                                <li><a class="dropdown-item active" href="#"><span>France</span> <span class="badge bg-success">•</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span>Espagne</span> <span class="badge bg-success">•</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span>Allemagne</span> <span class="badge bg-warning">•</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span>Italie</span></a></li>
+                                <li class="booking-list-title mt-2" data-i18n="other_bookings">Autres entités</li>
+                                <li><a class="dropdown-item" href="#"><span>Belgique</span> <span class="badge bg-success">•</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span>Suisse</span></a></li>
+                                <li><a class="dropdown-item" href="#"><span>Luxembourg</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="badge-legend">
+                            <span class="badge-info"><span class="badge bg-success">•</span> <span data-i18n="imported_today">Importé aujourd'hui</span></span>
+                            <span class="badge-info"><span class="badge bg-warning">•</span> <span data-i18n="outdated_import">Import incomplet</span></span>
+                        </div>
                     </div>
-
-                    <div class="ms-auto d-flex align-items-center">
-                        <!-- Sélecteur de langue -->
-                        <div class="language-selector me-3">
-                            <select id="language-selector" class="form-select form-select-sm">
-                                <option value="fr">Français</option>
-                                <option value="en">English</option>
-                                <option value="es">Español</option>
-                            </select>
+                    
+                    <div class="navbar-nav ms-auto">
+                        <!-- Import Button -->
+                        <button class="btn btn-primary import-btn me-3" data-view="import">
+                            <i class="fas fa-file-import"></i> <span data-i18n="import_data">Importer</span>
+                        </button>
+                        
+                        <!-- Language Switcher -->
+                        <div class="dropdown lang-switcher">
+                            <button class="btn dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-globe"></i> <span id="current-language">FR</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                                <li><a class="dropdown-item active" href="#" data-lang="fr"><img src="https://flagcdn.com/24x18/fr.png" alt="Français"> Français</a></li>
+                                <li><a class="dropdown-item" href="#" data-lang="es"><img src="https://flagcdn.com/24x18/es.png" alt="Español"> Español</a></li>
+                            </ul>
                         </div>
-                        <div class="notifications me-3">
-                            <i class="fas fa-bell position-relative">
-                                <span class="notification-badge">3</span>
-                            </i>
-                        </div>
-                        <div class="user-dropdown">
-                            <img src="https://via.placeholder.com/40" alt="User" class="rounded-circle">
-                            <span>John Doe <i class="fas fa-chevron-down small-icon"></i></span>
+                        
+                        <!-- User Profile -->
+                        <div class="dropdown user-dropdown ms-3">
+                            <button class="btn dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://via.placeholder.com/30" alt="User" class="rounded-circle">
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> <span data-i18n="profile">Profil</span></a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> <span data-i18n="preferences">Préférences</span></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Déconnexion</span></a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -80,8 +115,20 @@
             <!-- Main Content Views -->
             <div class="view-container">
                 <!-- Dashboard View -->
-                <div id="dashboard-view" class="content-view active">
+                <div id="dashboard-view" class="content-view">
                     <h2 data-i18n="dashboard_title">Tableau de bord</h2>
+                    
+                    <div class="dashboard-summary">
+                        <div class="summary-header">
+                            <h3 data-i18n="financial_overview">Vue d'ensemble financière</h3>
+                            <div class="period-selector">
+                                <button class="btn btn-sm btn-outline-primary active">Aujourd'hui</button>
+                                <button class="btn btn-sm btn-outline-primary">Cette semaine</button>
+                                <button class="btn btn-sm btn-outline-primary">Ce mois</button>
+                                <button class="btn btn-sm btn-outline-primary">Personnalisé</button>
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="kpi-container">
                         <div class="kpi-card">
@@ -92,6 +139,10 @@
                                 <h3>28 500 €</h3>
                                 <p data-i18n="unmatched_payments">Paiements non rapprochés</p>
                                 <span class="kpi-count"><i class="fas fa-exchange-alt me-1"></i>15 transactions</span>
+                                <div class="kpi-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+8.5%</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -103,6 +154,10 @@
                                 <h3>42 750 €</h3>
                                 <p data-i18n="open_suspens">Suspens ouverts</p>
                                 <span class="kpi-count"><i class="fas fa-exchange-alt me-1"></i>22 transactions</span>
+                                <div class="kpi-trend down">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span>-3.2%</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -114,6 +169,10 @@
                                 <h3>15 200 €</h3>
                                 <p data-i18n="older_than_30_days">Suspens > 30 jours</p>
                                 <span class="kpi-count"><i class="fas fa-exchange-alt me-1"></i>7 transactions</span>
+                                <div class="kpi-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+12.7%</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -125,18 +184,137 @@
                                 <h3>152 350 €</h3>
                                 <p data-i18n="matched_this_month">Rapprochés (ce mois)</p>
                                 <span class="kpi-count"><i class="fas fa-exchange-alt me-1"></i>64 transactions</span>
+                                <div class="kpi-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+5.3%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card">
+                            <div class="kpi-icon bg-info">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="kpi-details">
+                                <h3>85.7%</h3>
+                                <p data-i18n="match_rate">Taux de rapprochement</p>
+                                <span class="kpi-count"><i class="fas fa-calculator me-1"></i>Efficacité</span>
+                                <div class="kpi-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>+2.1%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="kpi-card">
+                            <div class="kpi-icon" style="background-color: #9c27b0;">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="kpi-details">
+                                <h3>12.3</h3>
+                                <p data-i18n="avg_days_to_match">Jours moy. pour rapprocher</p>
+                                <span class="kpi-count"><i class="fas fa-history me-1"></i>Performance</span>
+                                <div class="kpi-trend down">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span>-1.8%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="dashboard-charts-container">
-                        <div class="dashboard-chart">
-                            <h4 data-i18n="evolution_chart">Évolution des suspens</h4>
-                            <canvas id="suspensChart"></canvas>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 data-i18n="evolution_chart">Évolution des suspens</h4>
+                                <div class="chart-actions">
+                                    <button class="btn btn-sm btn-light"><i class="fas fa-download"></i></button>
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-sync-alt me-2"></i>Actualiser</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-expand-arrows-alt me-2"></i>Agrandir</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="suspensChart"></canvas>
+                            </div>
                         </div>
-                        <div class="dashboard-chart">
-                            <h4 data-i18n="age_distribution_chart">Répartition par âge des suspens</h4>
-                            <canvas id="ageDistributionChart"></canvas>
+                        
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 data-i18n="age_distribution_chart">Répartition par âge des suspens</h4>
+                                <div class="chart-actions">
+                                    <button class="btn btn-sm btn-light"><i class="fas fa-download"></i></button>
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-sync-alt me-2"></i>Actualiser</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-expand-arrows-alt me-2"></i>Agrandir</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="ageDistributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-charts-container">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 data-i18n="currency_distribution">Répartition par devise</h4>
+                                <div class="chart-actions">
+                                    <button class="btn btn-sm btn-light"><i class="fas fa-download"></i></button>
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-sync-alt me-2"></i>Actualiser</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-expand-arrows-alt me-2"></i>Agrandir</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="currencyChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 data-i18n="match_performance">Performance de rapprochement</h4>
+                                <div class="chart-actions">
+                                    <button class="btn btn-sm btn-light"><i class="fas fa-download"></i></button>
+                                    <div class="dropdown d-inline-block">
+                                        <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-sync-alt me-2"></i>Actualiser</a></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-expand-arrows-alt me-2"></i>Agrandir</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="matchPerformanceChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
@@ -227,6 +405,202 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Rapprochements automatiques -->
+                    <div class="card auto-match-card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-robot me-2"></i>
+                                <span data-i18n="auto_matched">Rapprochements automatiques</span>
+                            </h5>
+                            <div>
+                                <button class="btn btn-sm btn-outline-success me-2" id="export-auto-matched">
+                                    <i class="fas fa-file-excel me-1"></i>
+                                    <span data-i18n="export_to_excel">Exporter vers Excel</span>
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary" id="refresh-auto-matched">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="auto-match-stats">
+                                <div class="auto-match-stat">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>58</h3>
+                                        <p data-i18n="total_auto_matched">Total rapprochés</p>
+                                    </div>
+                                </div>
+                                <div class="auto-match-stat">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>23</h3>
+                                        <p data-i18n="today_auto_matched">Aujourd'hui</p>
+                                    </div>
+                                </div>
+                                <div class="auto-match-stat">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-euro-sign"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>78 650 €</h3>
+                                        <p data-i18n="amount_auto_matched">Montant total</p>
+                                    </div>
+                                </div>
+                                <div class="auto-match-stat">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-percentage"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3>68.4%</h3>
+                                        <p data-i18n="success_rate">Taux de réussite</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th data-i18n="date">Date</th>
+                                            <th data-i18n="reference">Référence</th>
+                                            <th data-i18n="client">Client</th>
+                                            <th data-i18n="amount">Montant</th>
+                                            <th data-i18n="confidence">Confiance</th>
+                                            <th data-i18n="exported">Exporté</th>
+                                            <th data-i18n="actions">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>09/04/2025</td>
+                                            <td>FAC-2025-0118</td>
+                                            <td>Dupont SARL</td>
+                                            <td>3 450,00 €</td>
+                                            <td>
+                                                <div class="confidence-badge high">
+                                                    <i class="fas fa-check-circle"></i> 98%
+                                                </div>
+                                            </td>
+                                            <td><span class="status-badge status-pending">En attente</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" title="Voir détails">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" title="Annuler rapprochement">
+                                                    <i class="fas fa-unlink"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>09/04/2025</td>
+                                            <td>FAC-2025-0117</td>
+                                            <td>Martin & Fils</td>
+                                            <td>5 820,00 €</td>
+                                            <td>
+                                                <div class="confidence-badge high">
+                                                    <i class="fas fa-check-circle"></i> 97%
+                                                </div>
+                                            </td>
+                                            <td><span class="status-badge status-pending">En attente</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" title="Voir détails">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" title="Annuler rapprochement">
+                                                    <i class="fas fa-unlink"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>09/04/2025</td>
+                                            <td>FAC-2025-0112</td>
+                                            <td>Techno Solutions</td>
+                                            <td>12 350,00 €</td>
+                                            <td>
+                                                <div class="confidence-badge medium">
+                                                    <i class="fas fa-check"></i> 85%
+                                                </div>
+                                            </td>
+                                            <td><span class="status-badge status-pending">En attente</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" title="Voir détails">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" title="Annuler rapprochement">
+                                                    <i class="fas fa-unlink"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>08/04/2025</td>
+                                            <td>FAC-2025-0109</td>
+                                            <td>Global Services</td>
+                                            <td>8 750,00 €</td>
+                                            <td>
+                                                <div class="confidence-badge high">
+                                                    <i class="fas fa-check-circle"></i> 99%
+                                                </div>
+                                            </td>
+                                            <td><span class="status-badge status-exported">Exporté</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" title="Voir détails">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" title="Annuler rapprochement">
+                                                    <i class="fas fa-unlink"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>08/04/2025</td>
+                                            <td>FAC-2025-0105</td>
+                                            <td>Entreprise Durand</td>
+                                            <td>6 120,00 €</td>
+                                            <td>
+                                                <div class="confidence-badge low">
+                                                    <i class="fas fa-exclamation-triangle"></i> 72%
+                                                </div>
+                                            </td>
+                                            <td><span class="status-badge status-exported">Exporté</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" title="Voir détails">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" title="Annuler rapprochement">
+                                                    <i class="fas fa-unlink"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <div class="pagination-info">Affichage de 1-5 sur 23 opérations</div>
+                                <nav aria-label="Pagination">
+                                    <ul class="pagination pagination-sm">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" aria-label="Précédent">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Suivant">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Receivable View (Rapprochement Paiements) -->
@@ -235,12 +609,15 @@
                     
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <p class="text-muted">Rapprochez facilement les paiements reçus avec les suspens/factures en attente.</p>
-                        <div class="d-flex gap-2">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                <input type="text" class="form-control" placeholder="Rechercher un paiement...">
-                            </div>
-                            <button class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filtres</button>
+                        <div>
+                            <button class="btn btn-outline-primary me-2" id="auto-match-payments">
+                                <i class="fas fa-magic me-1"></i>
+                                <span data-i18n="auto_match">Rapprochement auto</span>
+                            </button>
+                            <button class="btn btn-success" id="export-matched-payments">
+                                <i class="fas fa-file-excel me-1"></i>
+                                <span data-i18n="export_matches">Exporter rapprochements</span>
+                            </button>
                         </div>
                     </div>
                     
@@ -251,7 +628,7 @@
                                 <h3>Paiements reçus non rapprochés</h3>
                                 <div>
                                     <button class="btn btn-sm btn-outline-primary"><i class="fas fa-sync-alt"></i></button>
-                                    <select class="form-select form-select-sm d-inline-block" style="width: auto;">
+                                    <select class="form-select form-select-sm" style="width: auto;">
                                         <option>Tous les paiements</option>
                                         <option>Avec suggestions</option>
                                         <option>Sans suggestions</option>
@@ -288,7 +665,7 @@
                                         <tbody>
                                             <tr data-id="PAY001">
                                                 <td>07/04/2025</td>
-                                                <td>VIR Dupont SARL 2587963</td>
+                                                <td>VIR Dupont SARL BGI2587963</td>
                                                 <td>3 450,00 €</td>
                                                 <td>Dupont SARL</td>
                                                 <td class="status-cell"><span class="status status-pending">Suggestion disponible</span></td>
@@ -296,7 +673,7 @@
                                             </tr>
                                             <tr data-id="PAY002">
                                                 <td>06/04/2025</td>
-                                                <td>VIR TECH Solutions F087</td>
+                                                <td>VIR TECH Solutions BGI4587087</td>
                                                 <td>5 675,00 €</td>
                                                 <td>TECH Solutions</td>
                                                 <td class="status-cell"><span class="status status-pending">Suggestion disponible</span></td>
@@ -304,7 +681,7 @@
                                             </tr>
                                             <tr data-id="PAY003">
                                                 <td>05/04/2025</td>
-                                                <td>VIR Martin Industries paiement</td>
+                                                <td>VIR Martin Industries BGI7892456</td>
                                                 <td>8 320,00 €</td>
                                                 <td>Martin Industries</td>
                                                 <td class="status-cell"><span class="status status-open">Non rapproché</span></td>
@@ -371,7 +748,7 @@
                             </div>
                             <div class="panel-content">
                                 <div class="payment-details mb-4">
-                                    <h4>VIR Dupont SARL 2587963</h4>
+                                    <h4>VIR Dupont SARL BGI2587963</h4>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <p><strong>Date:</strong> 07/04/2025</p>
@@ -440,57 +817,91 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <p class="text-muted">Suivez et gérez tous les suspens en attente de rapprochement.</p>
                         <div class="d-flex gap-2">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                <input type="text" class="form-control" placeholder="Rechercher un suspens...">
-                            </div>
                             <button class="btn btn-outline-primary"><i class="fas fa-filter"></i> Filtres</button>
                         </div>
                     </div>
                     
-                    <div class="suspens-filters">
-                        <div class="filter-group">
-                            <label>Âge:</label>
-                            <select class="form-select form-select-sm">
-                                <option>Tous</option>
-                                <option>< 15 jours</option>
-                                <option>15-30 jours</option>
-                                <option>30-60 jours</option>
-                                <option>> 60 jours</option>
-                            </select>
+                    <div class="filters-container mb-3">
+                        <div class="row g-2">
+                            <div class="col-md-2">
+                                <label for="pivot-booking-entity-filter" class="form-label" data-i18n="booking_entity">Entité de booking</label>
+                                <select class="form-select" id="pivot-booking-entity-filter">
+                                    <option value="all" data-i18n="all">Tous</option>
+                                    <option value="FR">France</option>
+                                    <option value="ES">Espagne</option>
+                                    <option value="UK">Royaume-Uni</option>
+                                    <option value="DE">Allemagne</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="pivot-account-filter" class="form-label" data-i18n="account">Compte</label>
+                                <select class="form-select" id="pivot-account-filter">
+                                    <option value="all" data-i18n="all">Tous</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="pivot-client-filter" class="form-label" data-i18n="client">Client</label>
+                                <select class="form-select" id="pivot-client-filter">
+                                    <option value="all" data-i18n="all">Tous</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="pivot-age-filter" class="form-label" data-i18n="age">Âge</label>
+                                <select class="form-select" id="pivot-age-filter">
+                                    <option value="all" data-i18n="all">Tous</option>
+                                    <option value="15">< 15 jours</option>
+                                    <option value="15-30">15-30 jours</option>
+                                    <option value="30-60">30-60 jours</option>
+                                    <option value="60">> 60 jours</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="pivot-status-filter" class="form-label" data-i18n="status">Statut</label>
+                                <select class="form-select" id="pivot-status-filter">
+                                    <option value="all" data-i18n="all">Tous</option>
+                                    <option value="open" data-i18n="open">Ouvert</option>
+                                    <option value="in_progress" data-i18n="in_progress">En cours</option>
+                                    <option value="investigate" data-i18n="investigate">Investigation</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="pivot-search" class="form-label" data-i18n="search">Recherche</label>
+                                <input type="text" class="form-control" id="pivot-search" placeholder="Référence, montant...">
+                            </div>
                         </div>
-                        <div class="filter-group">
-                            <label>Statut:</label>
-                            <select class="form-select form-select-sm">
-                                <option>Tous</option>
-                                <option>Ouverts</option>
-                                <option>En investigation</option>
-                                <option>À relancer</option>
-                                <option>Validé - Attente Annulation</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label>Montant:</label>
-                            <select class="form-select form-select-sm">
-                                <option>Tous</option>
-                                <option>< 1 000 €</option>
-                                <option>1 000 € - 5 000 €</option>
-                                <option>> 5 000 €</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label>Client:</label>
-                            <select class="form-select form-select-sm">
-                                <option>Tous</option>
-                                <option>Dupont SARL</option>
-                                <option>TECH Solutions</option>
-                                <option>Martin Industries</option>
-                                <option>Durand & Cie</option>
-                                <option>Bernard SARL</option>
-                            </select>
-                        </div>
-                        <div class="ms-auto">
-                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-save"></i> Sauvegarder filtres</button>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="filter-container d-flex flex-wrap align-items-center gap-3">
+                                <div>
+                                    <label for="suspens-status-filter" class="me-2"><strong data-i18n="status">Statut :</strong></label>
+                                    <select id="suspens-status-filter" class="form-select form-select-sm">
+                                        <option value="all" data-i18n="all_status">Tous les statuts</option>
+                                        <option value="open" data-i18n="status_open">Ouvert</option>
+                                        <option value="investigate" data-i18n="status_investigate">En investigation</option>
+                                        <option value="followup" data-i18n="status_followup">À relancer</option>
+                                        <option value="pending" data-i18n="status_pending">Suggestion disponible</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="suspens-account-filter" class="me-2"><strong data-i18n="account">Compte :</strong></label>
+                                    <select id="suspens-account-filter" class="form-select form-select-sm account-selector">
+                                        <option value="all" data-i18n="all_accounts">Tous les comptes</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="suspens-period-filter" class="me-2"><strong data-i18n="date_range">Période :</strong></label>
+                                    <select id="suspens-period-filter" class="form-select form-select-sm">
+                                        <option value="all" data-i18n="all_periods">Toutes</option>
+                                        <option value="week" data-i18n="period_week">7 derniers jours</option>
+                                        <option value="month" data-i18n="period_month">30 derniers jours</option>
+                                        <option value="quarter" data-i18n="period_quarter">90 derniers jours</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-sm btn-primary" id="filter-suspens-btn" data-i18n="apply_filters">Appliquer les filtres</button>
+                                <button class="btn btn-sm btn-outline-secondary" id="reset-suspens-filters-btn" data-i18n="reset_filters">Réinitialiser</button>
+                            </div>
                         </div>
                     </div>
                     
@@ -503,6 +914,8 @@
                                         <th>Âge (j)</th>
                                         <th>Client</th>
                                         <th>Référence</th>
+                                        <th data-i18n="booking_entity">Entité</th>
+                                        <th data-i18n="account">Compte</th>
                                         <th>Montant</th>
                                         <th>Statut</th>
                                         <th>Dernière Action</th>
@@ -515,12 +928,15 @@
                                         <td><span class="badge bg-danger">43</span></td>
                                         <td>Durand & Cie</td>
                                         <td>FAC-2025-0042</td>
+                                        <td>France</td>
+                                        <td>Receivable-FR</td>
                                         <td>4 250,00 €</td>
                                         <td><span class="status status-investigate">En investigation</span></td>
                                         <td>Contact client 25/03</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -531,12 +947,15 @@
                                         <td><span class="badge bg-danger">40</span></td>
                                         <td>Martin SA</td>
                                         <td>FAC-2025-0039</td>
+                                        <td>France</td>
+                                        <td>Receivable-FR</td>
                                         <td>3 780,00 €</td>
                                         <td><span class="status status-followup">À relancer</span></td>
                                         <td>Email envoyé 02/04</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -547,12 +966,15 @@
                                         <td><span class="badge bg-danger">36</span></td>
                                         <td>Bernard SARL</td>
                                         <td>FAC-2025-0051</td>
+                                        <td>France</td>
+                                        <td>Receivable-FR</td>
                                         <td>2 450,00 €</td>
                                         <td><span class="status status-open">Ouvert</span></td>
                                         <td>-</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -563,12 +985,15 @@
                                         <td><span class="badge bg-warning">28</span></td>
                                         <td>TECH Solutions</td>
                                         <td>FAC-2025-0063</td>
+                                        <td>Espagne</td>
+                                        <td>Receivable-ES</td>
                                         <td>5 675,00 €</td>
                                         <td><span class="status status-pending">Suggestion disponible</span></td>
                                         <td>-</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-success"><i class="fas fa-link"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -579,12 +1004,15 @@
                                         <td><span class="badge bg-warning">23</span></td>
                                         <td>Dupont SARL</td>
                                         <td>FAC-2025-0087</td>
+                                        <td>France</td>
+                                        <td>Receivable-FR</td>
                                         <td>3 450,00 €</td>
                                         <td><span class="status status-pending">Suggestion disponible</span></td>
                                         <td>-</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-success"><i class="fas fa-link"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -595,12 +1023,15 @@
                                         <td><span class="badge bg-warning">18</span></td>
                                         <td>Petit SARL</td>
                                         <td>FAC-2025-0092</td>
+                                        <td>France</td>
+                                        <td>Receivable-FR</td>
                                         <td>2 150,00 €</td>
                                         <td><span class="status status-pending">Suggestion disponible</span></td>
                                         <td>-</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-success"><i class="fas fa-link"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -611,12 +1042,15 @@
                                         <td><span class="badge bg-info">13</span></td>
                                         <td>Martin Industries</td>
                                         <td>FAC-2025-0102</td>
+                                        <td>France</td>
+                                        <td>Receivable-FR</td>
                                         <td>8 320,00 €</td>
                                         <td><span class="status status-open">Ouvert</span></td>
                                         <td>-</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -627,12 +1061,15 @@
                                         <td><span class="badge bg-info">10</span></td>
                                         <td>Durand & Cie</td>
                                         <td>FAC-2025-0115</td>
+                                        <td>France</td>
+                                        <td>Receivable-FR</td>
                                         <td>2 875,00 €</td>
                                         <td><span class="status status-open">Ouvert</span></td>
                                         <td>-</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-search"></i></button>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#swiftInfoModal" title="Informations SWIFT"><i class="fas fa-university"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-comment"></i></button>
                                                 <button class="btn btn-sm btn-outline-primary"><i class="fas fa-ellipsis-v"></i></button>
                                             </div>
@@ -696,7 +1133,7 @@
                                             <button class="btn btn-outline-primary me-2" data-action="check-swift"><i class="fas fa-exchange-alt"></i> Vérifier SWIFT</button>
                                             <button class="btn btn-outline-primary me-2" data-action="followup"><i class="fas fa-bell"></i> Marquer à relancer</button>
                                             <button class="btn btn-outline-primary me-2" data-action="search-payment"><i class="fas fa-search"></i> Chercher paiement</button>
-                                            <button class="btn btn-outline-secondary"><i class="fas fa-sticky-note"></i> Ajouter note</button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-sticky-note"></i> Ajouter note</button>
                                         </div>
                                     </div>
                                     
@@ -733,6 +1170,322 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                                     <button type="button" class="btn btn-primary">Mettre à jour</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reverse Suspens View -->
+                <div id="reverse-suspens-view" class="content-view">
+                    <div class="page-header">
+                        <h1 data-i18n="complex_matching_title">Rapprochement Complexe</h1>
+                        <p class="text-muted" data-i18n="complex_matching_description">Gérez les rapprochements complexes (N vers N) et les paiements groupés avec assistance.</p>
+                    </div>
+                    
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <span data-i18n="complex_matching_info">Utilisez cette interface pour les situations où un paiement couvre plusieurs factures ou lorsque plusieurs paiements correspondent à une facture.</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0" data-i18n="client_filter_title">Filtrer par client</h5>
+                                    <button class="btn btn-sm btn-outline-primary" id="apply-client-filter">
+                                        <i class="fas fa-filter me-1"></i> <span data-i18n="apply_filter">Appliquer</span>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="client-select" class="form-label" data-i18n="select_client">Sélectionner le client</label>
+                                            <select class="form-select" id="client-select">
+                                                <option value="" selected data-i18n="all_clients">Tous les clients</option>
+                                                <option value="1">Durand & Cie</option>
+                                                <option value="2">Martin Industries</option>
+                                                <option value="3">Global Trading SA</option>
+                                                <option value="4">TECH Solutions</option>
+                                                <option value="5">EuroFinance</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="date-range" class="form-label" data-i18n="date_range">Période</label>
+                                            <select class="form-select" id="date-range">
+                                                <option value="30" data-i18n="last_30_days">30 derniers jours</option>
+                                                <option value="60" data-i18n="last_60_days">60 derniers jours</option>
+                                                <option value="90" selected data-i18n="last_90_days">90 derniers jours</option>
+                                                <option value="custom" data-i18n="custom_period">Période personnalisée</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="currency-filter" class="form-label" data-i18n="currency">Devise</label>
+                                            <select class="form-select" id="currency-filter">
+                                                <option value="" selected data-i18n="all_currencies">Toutes les devises</option>
+                                                <option value="EUR">EUR</option>
+                                                <option value="USD">USD</option>
+                                                <option value="GBP">GBP</option>
+                                                <option value="CHF">CHF</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="complex-matching-container">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0" data-i18n="available_payments">Paiements disponibles</h5>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-secondary me-2" id="refresh-payments">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" id="add-all-selected-payments">
+                                                <i class="fas fa-plus me-1"></i> <span data-i18n="add_selected">Ajouter sélection</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-sm mb-0" id="available-payments-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="30">
+                                                            <input class="form-check-input" type="checkbox" id="select-all-payments">
+                                                        </th>
+                                                        <th data-i18n="date">Date</th>
+                                                        <th data-i18n="reference">Référence</th>
+                                                        <th data-i18n="client">Client</th>
+                                                        <th data-i18n="amount">Montant</th>
+                                                        <th width="50"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" name="payment">
+                                                        </td>
+                                                        <td>07/04/2025</td>
+                                                        <td>VIR7523698</td>
+                                                        <td>Global Trading SA</td>
+                                                        <td>8 250,00 €</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary add-payment" title="Ajouter">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" name="payment">
+                                                        </td>
+                                                        <td>05/04/2025</td>
+                                                        <td>VIR0127532</td>
+                                                        <td>Durand & Cie</td>
+                                                        <td>2 750,00 €</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary add-payment" title="Ajouter">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" name="payment">
+                                                        </td>
+                                                        <td>02/04/2025</td>
+                                                        <td>VIR3698741</td>
+                                                        <td>Martin Industries</td>
+                                                        <td>4 120,00 €</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary add-payment" title="Ajouter">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-6">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0" data-i18n="available_suspens">Suspens disponibles</h5>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-secondary me-2" id="refresh-suspens">
+                                                <i class="fas fa-sync-alt"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" id="add-all-selected-suspens">
+                                                <i class="fas fa-plus me-1"></i> <span data-i18n="add_selected">Ajouter sélection</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-sm mb-0" id="available-suspens-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="30">
+                                                            <input class="form-check-input" type="checkbox" id="select-all-suspens">
+                                                        </th>
+                                                        <th data-i18n="date">Date</th>
+                                                        <th data-i18n="invoice">Facture</th>
+                                                        <th data-i18n="client">Client</th>
+                                                        <th data-i18n="amount">Montant</th>
+                                                        <th width="50"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" name="suspens">
+                                                        </td>
+                                                        <td>25/03/2025</td>
+                                                        <td>FAC-2025-0102</td>
+                                                        <td>Martin Industries</td>
+                                                        <td>1 650,00 €</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary add-suspens" title="Ajouter">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" name="suspens">
+                                                        </td>
+                                                        <td>25/03/2025</td>
+                                                        <td>FAC-2025-0103</td>
+                                                        <td>Martin Industries</td>
+                                                        <td>2 470,00 €</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary add-suspens" title="Ajouter">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" name="suspens">
+                                                        </td>
+                                                        <td>10/03/2025</td>
+                                                        <td>FAC-2025-0063</td>
+                                                        <td>TECH Solutions</td>
+                                                        <td>3 750,00 €</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary add-suspens" title="Ajouter">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" name="suspens">
+                                                        </td>
+                                                        <td>08/03/2025</td>
+                                                        <td>FAC-2025-0057</td>
+                                                        <td>Global Trading SA</td>
+                                                        <td>8 250,00 €</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-primary add-suspens" title="Ajouter">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0" data-i18n="matching_workspace">Espace de rapprochement</h5>
+                                        <div class="matching-tools">
+                                            <button class="btn btn-sm btn-outline-danger me-2" id="clear-workspace">
+                                                <i class="fas fa-trash-alt me-1"></i> <span data-i18n="clear">Vider</span>
+                                            </button>
+                                            <button class="btn btn-sm btn-success" id="auto-suggest-matching">
+                                                <i class="fas fa-magic me-1"></i> <span data-i18n="auto_suggest">Suggestion auto</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="matching-workspace">
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="workspace-section">
+                                                        <h6 data-i18n="selected_payments">Paiements sélectionnés</h6>
+                                                        <div class="selected-items" id="selected-payments">
+                                                            <div class="selected-item">
+                                                                <div class="item-info">
+                                                                    <span class="item-title">VIR7523698 - Global Trading SA</span>
+                                                                    <span class="item-details">07/04/2025 | 8 250,00 €</span>
+                                                                </div>
+                                                                <button class="btn btn-sm btn-outline-danger remove-item" title="Supprimer">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="total-section">
+                                                            <span data-i18n="total_amount">Montant total</span>: <strong>8 250,00 €</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="workspace-section">
+                                                        <h6 data-i18n="selected_suspens">Suspens sélectionnés</h6>
+                                                        <div class="selected-items" id="selected-suspens">
+                                                            <div class="selected-item">
+                                                                <div class="item-info">
+                                                                    <span class="item-title">FAC-2025-0057 - Global Trading SA</span>
+                                                                    <span class="item-details">08/03/2025 | 8 250,00 €</span>
+                                                                </div>
+                                                                <button class="btn btn-sm btn-outline-danger remove-item" title="Supprimer">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="total-section">
+                                                            <span data-i18n="total_amount">Montant total</span>: <strong>8 250,00 €</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="matching-summary">
+                                                <div class="balance-status balanced">
+                                                    <i class="fas fa-check-circle me-2"></i>
+                                                    <span data-i18n="balanced">Équilibré: les montants correspondent parfaitement</span>
+                                                </div>
+                                                
+                                                <div class="matching-actions mt-4">
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="confirm-matching-check">
+                                                        <label class="form-check-label" for="confirm-matching-check" data-i18n="confirm_matching">
+                                                            Je confirme que ces éléments doivent être rapprochés
+                                                        </label>
+                                                    </div>
+                                                    <button class="btn btn-primary" id="confirm-matching" disabled>
+                                                        <i class="fas fa-link me-2"></i> <span data-i18n="validate_matching">Valider le rapprochement</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1030,7 +1783,7 @@
                                 </div>
                                 
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="swift-check" checked>
+                                    <input class="form-check-input" type="checkbox" id="swift-check" checked>
                                     <label class="form-check-label" for="swift-check">Activer l'intégration SWIFT</label>
                                 </div>
                             </div>
@@ -1189,12 +1942,138 @@
         </div>
     </div>
 
-    <!-- Modals will be added in next parts -->
+    <!-- Modal pour les informations SWIFT -->
+    <div class="modal fade" id="swiftInfoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Informations SWIFT</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h4>FAC-2025-0042</h4>
+                        <span class="badge bg-info">Informations bancaires</span>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="detail-group">
+                                <h5>Détails du message SWIFT</h5>
+                                <div class="detail-item">
+                                    <span class="detail-label">Référence SWIFT:</span>
+                                    <span class="detail-value">SWFTRF20250406789541</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Date du message:</span>
+                                    <span class="detail-value">02/04/2025 14:35</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Code banque:</span>
+                                    <span class="detail-value">BNPAFRPP</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Type de message:</span>
+                                    <span class="detail-value">MT103 (Transfert client)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-group">
+                                <h5>Notification de paiement</h5>
+                                <div class="detail-item">
+                                    <span class="detail-label">Statut:</span>
+                                    <span class="detail-value"><span class="badge bg-warning">En attente</span></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Motif du délai:</span>
+                                    <span class="detail-value">Vérification KYC supplémentaire</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Date estimée de traitement:</span>
+                                    <span class="detail-value">08/04/2025</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Banque intermédiaire:</span>
+                                    <span class="detail-value">Oui</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <h5>Informations détaillées</h5>
+                            <div class="swift-details p-3 border rounded bg-light">
+                                <p><strong>Message d'information:</strong> Le paiement est actuellement en cours de traitement avec un délai supplémentaire en raison d'une vérification KYC (Know Your Customer) requise par la banque intermédiaire. Une confirmation du virement a été initiée par la banque émettrice, mais est en attente d'approbation finale.</p>
+                                <p><strong>Actions recommandées:</strong> Aucune action n'est requise de votre part pour le moment. Le paiement devrait être finalisé d'ici le 08/04/2025. Si le paiement n'est pas reçu à cette date, une notification de relance sera envoyée automatiquement.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Historique des messages</h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Statut</th>
+                                            <th>Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>02/04/2025 14:35</td>
+                                            <td>MT103</td>
+                                            <td><span class="badge bg-success">Envoyé</span></td>
+                                            <td>Initiation du transfert</td>
+                                        </tr>
+                                        <tr>
+                                            <td>03/04/2025 09:12</td>
+                                            <td>MT199</td>
+                                            <td><span class="badge bg-warning">En attente</span></td>
+                                            <td>Vérification KYC requise</td>
+                                        </tr>
+                                        <tr>
+                                            <td>04/04/2025 11:45</td>
+                                            <td>MT299</td>
+                                            <td><span class="badge bg-info">Information</span></td>
+                                            <td>Documents KYC en cours d'analyse</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary">Exporter les détails SWIFT</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Script d'internationalisation -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+    <!-- Fichiers de traduction -->
+    <script src="i18n/fr.js"></script>
+    <script src="i18n/es.js"></script>
+    <!-- Scripts de l'application -->
+    <script src="navigation.js"></script>
     <script src="multi_lang.js"></script>
+    <script src="language-switcher.js"></script>
+    <script src="booking.js"></script>
+    <script src="filters.js"></script>
+    <script src="suspens-details.js"></script>
+    <script src="fix-navigation.js"></script>
+    <script src="dashboard-charts.js"></script>
+    <script src="auto-matcher.js"></script>
+    <script src="export-manager.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

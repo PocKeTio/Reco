@@ -36,6 +36,11 @@ class I18nManager {
             
             // Mettre à jour le sélecteur de langue s'il existe
             this.updateLanguageSelector();
+            
+            // Émettre un événement pour informer l'application du chargement des traductions
+            document.dispatchEvent(new CustomEvent('i18nLoaded', { 
+                detail: { language: this.currentLanguage } 
+            }));
         } catch (error) {
             console.error('Erreur lors de l\'initialisation des traductions:', error);
             // Fallback à la langue par défaut si une erreur se produit
@@ -105,6 +110,12 @@ class I18nManager {
             
             // Mettre à jour le sélecteur de langue
             this.updateLanguageSelector();
+            
+            // Mettre à jour l'apparence des boutons de langue
+            this.updateLanguageButtons(lang);
+            
+            // Mettre à jour les graphiques et tableaux dynamiques
+            this.updateDynamicElements();
             
             // Événement personnalisé pour signaler le changement de langue
             document.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: lang } }));
@@ -193,17 +204,132 @@ class I18nManager {
             this.changeLanguage(e.target.value);
         });
     }
+    
+    /**
+     * Met à jour l'apparence des boutons de langue
+     * @param {string} activeLang - Langue active
+     */
+    updateLanguageButtons(activeLang) {
+        // Réinitialiser tous les boutons
+        document.querySelectorAll('[data-lang]').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-secondary');
+            btn.classList.remove('active');
+            btn.setAttribute('aria-pressed', 'false');
+        });
+        
+        // Activer le bouton de la langue sélectionnée
+        const activeButton = document.querySelector(`[data-lang="${activeLang}"]`);
+        if (activeButton) {
+            activeButton.classList.remove('btn-outline-secondary');
+            activeButton.classList.add('btn-primary');
+            activeButton.classList.remove('active');
+            activeButton.setAttribute('aria-pressed', 'false');
+        }
+    }
+    
+    /**
+     * Met à jour les éléments dynamiques (graphiques, tableaux, etc.)
+     */
+    updateDynamicElements() {
+        this.updateChartLabels();
+        this.updateTableHeaders();
+        this.updateDynamicContent();
+    }
+    
+    /**
+     * Met à jour les étiquettes des graphiques
+     */
+    updateChartLabels() {
+        if (window.charts) {
+            Object.values(window.charts).forEach(chart => {
+                if (chart && chart.config) {
+                    if (chart.config.options.title && chart.config.options.title.text) {
+                        const key = chart.config.options.title._titleI18n;
+                        if (key && this.translations[this.currentLanguage][key]) {
+                            chart.config.options.title.text = this.translations[this.currentLanguage][key];
+                        }
+                    }
+                    
+                    if (chart.config.options.scales && chart.config.options.scales.xAxes) {
+                        chart.config.options.scales.xAxes.forEach(axis => {
+                            if (axis.scaleLabel && axis.scaleLabel._labelI18n) {
+                                const key = axis.scaleLabel._labelI18n;
+                                if (this.translations[this.currentLanguage][key]) {
+                                    axis.scaleLabel.labelString = this.translations[this.currentLanguage][key];
+                                }
+                            }
+                        });
+                    }
+                    
+                    if (chart.config.options.scales && chart.config.options.scales.yAxes) {
+                        chart.config.options.scales.yAxes.forEach(axis => {
+                            if (axis.scaleLabel && axis.scaleLabel._labelI18n) {
+                                const key = axis.scaleLabel._labelI18n;
+                                if (this.translations[this.currentLanguage][key]) {
+                                    axis.scaleLabel.labelString = this.translations[this.currentLanguage][key];
+                                }
+                            }
+                        });
+                    }
+                    
+                    chart.update();
+                }
+            });
+        }
+    }
+    
+    /**
+     * Met à jour les en-têtes de tableau
+     */
+    updateTableHeaders() {
+        // Implémentation pour les tableaux générés dynamiquement
+        document.querySelectorAll('th[data-i18n]').forEach(header => {
+            const key = header.getAttribute('data-i18n');
+            if (key && this.translations[this.currentLanguage][key]) {
+                header.textContent = this.translations[this.currentLanguage][key];
+            }
+        });
+    }
+    
+    /**
+     * Met à jour tout contenu généré dynamiquement
+     */
+    updateDynamicContent() {
+        // Mettre à jour les éléments de l'interface utilisateur qui sont générés dynamiquement
+        // comme les modales, messages d'erreur, etc.
+        
+        // Émettre un événement pour que les modules externes puissent réagir
+        document.dispatchEvent(new CustomEvent('dynamicContentUpdate', { 
+            detail: { language: this.currentLanguage, translations: this.translations[this.currentLanguage] } 
+        }));
+    }
 }
 
 // Créer une instance globale du gestionnaire i18n
 const i18n = new I18nManager();
 
 // Fonction abrégée pour faciliter la traduction
-function __(key, params = {}) {
+window.__ = function(key, params = {}) {
     return i18n.translate(key, params);
-}
+};
 
-// Exporter les objets si on est dans un environnement module
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { I18nManager, i18n, __ };
-}
+// Exposer l'instance i18n globalement
+window.i18n = i18n;
+
+// Initialiser les écouteurs d'événements pour les boutons de langue après le chargement du DOM
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-lang]').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const lang = this.getAttribute('data-lang');
+            i18n.changeLanguage(lang);
+        });
+    });
+    
+    // Initialiser le sélecteur de langue s'il existe
+    i18n.initLanguageSelector();
+    
+    // Mettre à jour l'apparence des boutons de langue
+    i18n.updateLanguageButtons(i18n.currentLanguage);
+});
